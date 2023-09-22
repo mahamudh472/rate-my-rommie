@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/roommatedetails.css' %}">
+<link rel="stylesheet" href="{% static 'css/rating.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="main-body mt-4">
+        <div class='container'>
+            <div class="row g-4 d-flex align-items-center">
+                <div class="col-12 col-md-6">
+                    <div>
+                        <img src='{{address.photo.url}}' alt="" class="img-fluid" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <h4 class='mb-4'>{{address.name}}</h4>
+                    <h6 class="text-secondary">Total roommate: {{address.total_roommates}} </h6>
+                    <h6 class="text-secondary">Location: {{address.location}}</h6>
+                    <h6 class="text-secondary">Avarage ratings: {% if address.average_rating == 0 %}Not Rated yet{% else %}{{address.average_rating}}{% endif %} </h6>
+                    <p class='my-4'><span class='fw-bolder'>Description</span>: {{address.description}}</p>
+                </div>
+            </div>
+        </div>
+        <!-- add Reviews -->
+        <div class="add-review mt-5">
+            <h3>Add Review</h3>
+            <form action="{% url 'main:address_add_review' address.id %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <h6>Rate</h6>
+                    <div>
+                        <div class="rate">
+                            <input type="radio" id="star5" name="rate" value="5" />
+                            <label for="star5" title="text">5 stars</label>
+                            <input type="radio" id="star4" name="rate" value="4" />
+                            <label for="star4" title="text">4 stars</label>
+                            <input type="radio" id="star3" name="rate" value="3" />
+                            <label for="star3" title="text">3 stars</label>
+                            <input type="radio" id="star2" name="rate" value="2" />
+                            <label for="star2" title="text">2 stars</label>
+                            <input type="radio" id="star1" name="rate" value="1" />
+                            <label for="star1" title="text">1 star</label>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                            name="review"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <h3 class="mt-5">Reviews</h3>
+
+        {% if address.addressreview_set.all %}
+        {% for review in address.addressreview_set.all %}
+        <div class="main-div">
+            <div class="main-div-2">
+                <h3 class="ovarall-review">{{review.rating}}</h3>
+                <div class="child-div">
+                    <a href="{% url 'main:profile_view' review.author.username %}">{{review.author.username}}</a>
+                    <p>{{review.text}}</p>
+
+                </div>
+                <p><small>{{review.created_date}}</small></p>
+            </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <div class="container-fluid">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">No Reviews Yet</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+
+
+    </div>
+</div>
+
+{% endblock %}

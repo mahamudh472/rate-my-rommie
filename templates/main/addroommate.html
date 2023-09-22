@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/7c2bbfb1ca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="addroommate.css">
+</head>
+
+<body>
+
+
+    <div class="container">
+
+        <h2 class="text-center my-3">Add Roommate</h2>
+
+        <div class="p-4 border rounded shadow">
+            <p class="mb-0 mb-1">Name:</p>
+            <input type="text" class="form-control mb-3" placeholder="Enter Name">
+            <p class="mb-0 mb-1">Email:</p>
+            <input type="text" class="form-control mb-3" placeholder="Enter Email">
+
+            <label class="picture" for="picture__input" tabIndex="0">
+                <span class="picture__image"></span>
+            </label>
+
+            <input type="file" name="picture__input" id="picture__input">
+
+            <div>
+
+            </div>
+
+            <div class="shadow p-3 ">
+                <p class="mb-0 mb-1">Attributes:</p>
+                <div class="d-flex justify-content-between align-items-center mb-4 gap-3">
+                    <input type="text" class="form-control " placeholder="Enter Attribute">
+                    <div class="st"> 
+                        <i class="fa-regular fa-star "></i>
+                        <i class="fa-regular fa-star "></i>
+                        <i class="fa-regular fa-star "></i>
+                        <i class="fa-regular fa-star "></i>
+                        <i class="fa-regular fa-star "></i>
+                    </div>
+                    <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                </div>
+              
+            </div>
+
+            <button class="btn btn-warning mt-3">Add Attributes</button>
+
+            <div class="text-end mt-5">
+                <button class="btn btn-primary">submit</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <script src="addroommate.js"></script>
+</body>
+
+</html>

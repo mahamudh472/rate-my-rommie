@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/signin.css' %}">
+{% endblock %}
+{% block content %}
+<div class="main-container">
+    <form class="login" method="post" action="{% url 'accounts:login' %}">
+      {% csrf_token %}
+        <h2>Welcome, User!</h2>
+        <p>Please log in</p>
+        <input type="text" placeholder="username or email" name="email" />
+        <input type="password" placeholder="Password" name="password" />
+        <input type="submit" value="Log In" />
+        <div class="links">
+          <a href="#">Forgot password</a>
+          <a href="{% url 'accounts:register' %}">Register</a>
+        </div>
+      </form>
+</div>    
+{% endblock %}

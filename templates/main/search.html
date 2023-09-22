@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+<link rel="stylesheet" href="{% static 'css/addressdetails.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h4 class="text-center mt-4"><b>{{total}}</b> {{key}} with <b>"{{keyword}}"</b> in their name</h4>
+
+
+
+<div class="container" style="min-height: 600px;">
+    {% if roommate_list %}
+    {% for roommate in roommate_list %}
+    <a href="{% url 'main:profile_view' roommate.user.username %}" class="text-decoration-none"> 
+        <div class="search-main-div2">
+            <i class="fa-solid fa-arrow-right"></i>
+
+            <div class="search-main-div">
+                <div class="div1">
+                    <h2 class="p-4 div1-text fw-bold text-center">4.3</h2>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-regular fa-star"></i>
+                </div>
+                <div class="div2">
+                    <h3 class="mb-4 ms-3">{{roommate.user.first_name}}</h3>
+                    <div class="div2-maindiv">
+                        <p class="fw-bold mb-0">smoke</p>
+                        <div class="emtydiv">
+                            <p class=" mb-0 w-50 h-100 bg-warning"></p>
+                        </div>
+                        <p class="fw-bold mb-0">50%</p>
+                    </div>
+
+
+                    <div class="div2-maindiv">
+                        <p class="fw-bold mb-0">noise</p>
+                        <div class="emtydiv">
+                            <p class=" mb-0 w-100 h-100 bg-success"></p>
+                        </div>
+                        <p class="fw-bold mb-0">98%</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% else %}
+    <div class="text-center mt-5">
+        <h1 class="text-center">No {{key}} Found</h1>
+    </div>
+    {% endif %}
+
+
+
+</div>
+
+
+{% endblock%}

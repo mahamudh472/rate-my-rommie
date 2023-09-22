@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/addroommate.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h2 class="text-center my-3">Add Address</h2>
+
+    <div class="p-4 border rounded shadow">
+        <form action="{% url 'main:add_address' %}" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            <p class="mb-0 mb-1">Address Name:</p>
+            <input type="text" class="form-control " placeholder="Enter Name" name="address-name">
+            <label for="">Location:</label>
+            <input type="text" class="form-control" name="address-location">
+            <label for="">Description:</label>
+            <textarea name="description" id="" cols="30" rows="10" class="form-control" name="description"></textarea>
+            <label for="">Total roommates:</label>
+            <input type="number" class="form-control mb-3" name="total-roommates">
+            <label class="picture" for="picture__input" tabIndex="0">
+                <span class="picture__image"></span>
+            </label>
+
+            <input type="file" name="picture__input" id="picture__input">
+            <div class="text-end mt-5">
+                <button class="btn btn-primary" type="submit">submit</button>
+            </div>
+        </form>
+        
+
+    </div>
+    
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/addroommate.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    {% block style %}{% endblock %}
+</head>
+
+<body>
+    {% if user.is_authenticated %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{message.tags}}{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    <div class="nav-con">
+        <div class="nav-con2">
+            <a href="{% url 'main:home' %}" class="text-decoration-none text-white">
+                <h3>LoGo</h3>
+            </a>
+            <div class=" search-con">
+                <div class="dropdown">
+                    <button id="nav-btn" class="btn  dropdown-toggle border text-white" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Roommate
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li onclick="cngNavElemets('Address')"><a class="dropdown-item" href="#">Address</a></li>
+                        <li onclick="cngNavElemets('Roommate')"><a class="dropdown-item" href="#">Roommate</a></li>
+                    </ul>
+                </div>
+                <form action="{% url 'main:search' %}" method="get">
+                    <input type="text" placeholder="enter Roommate" name="Roommate" class="nav-input" id="nav-input">
+                </form>
+            </div>
+            <div class="navber_link">
+                {% if user.is_authenticated %}
+                <a class="text-white" href="{% url 'main:profile' %}">{{user.username}}</a>
+                <a class="btn btn-primary" href="{% url 'accounts:logout' %}">Logout</a>
+                {% else %}
+                <a class="btn btn-primary" href="{% url 'accounts:login' %}">Login</a>
+                <a class="btn btn-danger" href="{% url 'accounts:register' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+    <footer class="footer-distributed">
+
+        <div class="footer-left">
+
+            <h3>Company<span>logo</span></h3>
+
+            <p class="footer-links">
+                <a href="#" class="link-1">Home</a>
+
+                <a href="#">Blog</a>
+
+                <a href="#">Pricing</a>
+
+                <a href="#">About</a>
+
+                <a href="#">Faq</a>
+
+                <a href="#">Contact</a>
+            </p>
+
+            <p class="footer-company-name">Company Name © 2015</p>
+        </div>
+
+        <div class="footer-center">
+
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p><span>444 S. Cedros Ave</span> Solana Beach, California</p>
+            </div>
+
+            <div>
+                <i class="fa fa-phone"></i>
+                <p>+1.555.555.5555</p>
+            </div>
+
+            <div>
+                <i class="fa fa-envelope"></i>
+                <p><a href="mailto:support@company.com">support@company.com</a></p>
+            </div>
+
+        </div>
+
+        <div class="footer-right">
+
+            <p class="footer-company-about">
+                <span>About the company</span>
+                Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor
+                lacus vehicula sit amet.
+            </p>
+
+
+
+        </div>
+
+    </footer>
+
+
+    </div>
+
+    <script src="{% static 'js/index.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+        
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
