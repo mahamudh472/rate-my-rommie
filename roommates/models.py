@@ -61,3 +61,12 @@ class RoommateReview(models.Model):
 
     def __str__(self):
         return self.text
+    
+class Attribute(models.Model):
+    author = models.ManyToManyField(UserProfile, blank=True)
+    review = models.ManyToManyField(RoommateReview, blank=True)
+    name = models.CharField(max_length=100, blank=True)
+    rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name

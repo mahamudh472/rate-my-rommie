@@ -1,24 +1,28 @@
-from django.shortcuts import render
-from roommates.models import UserProfile, Address, SocialMedia, AddressReview, RoommateReview
+from django.shortcuts import render, redirect
+from roommates.models import UserProfile, Address, Attribute
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+import json
 # Create your views here.
+@login_required(login_url="/accounts/login")
 def home(request):
     return render(request, 'main/index.html')
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def profile(request):
     user = UserProfile.objects.get(user=request.user)
-    return render(request, 'main/roommatedetails.html', {'userp': user})
+    attributes = Attribute.objects.filter(author=user)
+    return render(request, 'main/roommatedetails.html', {'userp': user, 'attributes': attributes})
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def profile_view(request, username):
     user = UserProfile.objects.get(user=User.objects.get(username=username))
-    return render(request, 'main/roommatedetails.html', {'userp': user})
+    all_attributes = Attribute.objects.all()
+    attributes = Attribute.objects.filter(author=user)
+    return render(request, 'main/roommatedetails.html', {'userp': user, 'attributes': attributes, 'all_attributes': all_attributes})
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def search(request):
     roomate_key = request.GET.get('Roommate', None)
     address_key = request.GET.get('Address', None)
@@ -54,7 +58,7 @@ def search(request):
         return render(request, 'main/searchaddress.html', context)
     return render(request, 'main/search.html')
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def add_address(request):
     if request.method == "POST":
         name = request.POST['address-name']
@@ -68,45 +72,77 @@ def add_address(request):
         return render(request, 'main/addaddress.html')
     return render(request, 'main/addaddress.html')
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def edit_profile(request):
-    user = UserProfile.objects.get(user=request.user)
     if request.method == "POST":
-        user.full_name = request.POST['full-name']
-        user.phone = request.POST['phone']
-        user.mobile = request.POST['mobile']
-        user.address = request.POST['address']
-        user.photo = request.FILES['picture__input']
-        user.save()
+        name = request.POST.get('name', None)
+        email = request.POST.get('email', None)
+        phone = request.POST.get('phone', None)
+        mobile = request.POST.get('mobile', None)
+        address = request.POST.get('address', None)
+        if name:
+            request.user.first_name = " ".join(name.split(' ')[:-1])
+            request.user.last_name = name.split(' ')[-1]
+        if email:
+            request.user.email = email
+        if phone:
+            request.user.userprofile.phone = phone
+        if mobile:
+            request.user.userprofile.mobile = mobile
+        if address:
+            request.user.userprofile.address = address
+        request.user.save()
+        request.user.userprofile.save()
+        
+        website = request.POST.get('website', None)
+        github = request.POST.get('github', None)
+        twitter = request.POST.get('twitter', None)
+        instagram = request.POST.get('instagram', None)
+        facebook = request.POST.get('facebook', None)
+        if website:
+            request.user.userprofile.socialmedia.website = website
+        if github:
+            request.user.userprofile.socialmedia.github = github
+        if twitter:
+            request.user.userprofile.socialmedia.twitter = twitter
+        if instagram:
+            request.user.userprofile.socialmedia.instagram = instagram
+        if facebook:
+            request.user.userprofile.socialmedia.facebook = facebook
+        request.user.userprofile.socialmedia.save()
         messages.success(request, 'Profile updated successfully')
-        return render(request, 'main/roommatedetails.html', {'user': user})
-    return render(request, 'main/editprofile.html', {'user': user})
+        return redirect('main:profile')
 
-@login_required(login_url="{% url 'accounts:login' %}")
-def edit_social(request):
-    user = UserProfile.objects.get(user=request.user)
-    if request.method == "POST":
-        user.socialmedia.website = request.POST['website']
-        user.socialmedia.github = request.POST['github']
-        user.socialmedia.twitter = request.POST['twitter']
-        user.socialmedia.instagram = request.POST['instagram']
-        user.socialmedia.facebook = request.POST['facebook']
-        user.socialmedia.save()
-        messages.success(request, 'Social media updated successfully')
-        return render(request, 'main/roommatedetails.html', {'user': user})
-    return render(request, 'main/editsocial.html', {'user': user})
+    return redirect("main:profile")
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def address_view(request, pk):
     address = Address.objects.get(id=pk)
     # reviews = address.addressreview_set.all()
     return render(request, 'main/addressdetails.html', {'address': address})
 
-@login_required(login_url="{% url 'accounts:login' %}")
+@login_required(login_url="/accounts/login")
 def address_add_review(request, pk):
     address = Address.objects.get(id=pk)
     if request.method == "POST":
         address.addressreview_set.create(author=request.user, text=request.POST['review'], rating=request.POST['rate'])
         messages.success(request, 'Review added successfully')
         return render(request, 'main/addressdetails.html', {'address': address})
-    return render(request, 'main/addreview.html', {'address': address})
+    return render(request, 'main/addressdetails.html', {'address': address})
+
+@login_required(login_url="/accounts/login")
+def roommate_add_review(request, pk):
+    roommate = UserProfile.objects.get(id=pk)
+    if request.method == "POST":
+        rev = roommate.roommatereview_set.create(author=request.user, text=request.POST['review'], rating=request.POST['rate'])
+        rev.save()
+        attributes = request.POST.get('attribute_list', None)
+        if attributes:
+            for i in json.loads(attributes):
+                attr = roommate.attribute_set.get_or_create(name=i[0], rating=i[1],)[0]
+                attr.review.add(rev)
+                attr.save()
+        messages.success(request, 'Review added successfully')
+        print(request.POST['attribute_list'])
+        return render(request, 'main/roommatedetails.html', {'userp': roommate})
+    return render(request, 'main/roommatedetails.html', {'userp': roommate})

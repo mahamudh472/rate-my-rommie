@@ -24,3 +24,46 @@ const cngHeadText = () => {
     }
 
 }
+
+function add_attribute(){
+    var element = document.getElementById("attr").value;
+    var rate = document.getElementsByName("rateA");
+    for (let index = 0; index < rate.length; index++) {
+        if (rate[index].checked == true) {
+            rating = rate[index].value;
+        }
+        
+    }
+    var data, old_data;
+    // get data from the element and store in localstorage
+    if(localStorage.getItem('attr')==null){
+        localStorage.setItem('attr','[]');
+        data = [element, rating];
+        old_data = JSON.parse(localStorage.getItem('attr'));
+        old_data.push(data);
+        localStorage.setItem('attr',JSON.stringify(old_data));
+
+    }else{
+        old_data = JSON.parse(localStorage.getItem('attr'));
+        data = [element, rating];
+        old_data.push(data);
+        localStorage.setItem('attr',JSON.stringify(old_data));
+    }
+    var attrList = document.getElementById('attrList');
+    attrList.value = localStorage.getItem('attr');
+    display_data();
+}
+function display_data(){
+    var data = JSON.parse(localStorage.getItem('attr'));
+    var list = document.getElementById('list');
+    list.innerHTML = '';
+    for (let index = 0; index < data.length; index++) {
+        list.innerHTML += `<li><b>${data[index][0]}</b> ${data[index][1]}</li>`
+        
+    }
+    document.getElementById("attr").value="";
+    document.getElementsByName("rateA")[0].checked = true;
+}
+window.onload = function(){
+    localStorage.clear();
+}

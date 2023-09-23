@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from roommates.models import UserProfile
+from roommates.models import UserProfile, SocialMedia
 import re
 
 # Create your views here.
@@ -52,11 +52,15 @@ def register(request):
             full_name=fullname,
         )[0]
         userProfile.save()
+        sos = SocialMedia.objects.get_or_create(
+            user=userProfile
+        )[0]
+        sos.save()
 
         # login user
         user = authenticate(request, username=username, password=password)
         login(request, user)
-        return redirect('main:home')
+        return redirect('main:add_address')
     return render(request, 'accounts/signup.html')
 
 def loginPage(request):
