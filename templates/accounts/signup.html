@@ -7,13 +7,13 @@
 <div class="main-container">
     <form class="login" action="{% url 'accounts:register' %}" method="post">
         {% csrf_token %}
-        <h2>Welcome, User!</h2>
+        <h2 class="text-dark">Welcome, User!</h2>
         <p>Please Register Your Account</p>
         <input type="text" placeholder="Full name" name="full-name" />
         <input type="email" placeholder="exmple@gmail.com" name="email" />
         <input type="password" placeholder="Password" name="password" />
         <input type="password" placeholder="Retype Password" name="re-password" />
-        <input type="submit" value="Sign Up" />
+        <input type="submit" value="Sign Up" class="btn btn-dark"/>
         <div class="links">
             <a href="{% url 'accounts:login' %}">sign in</a>
         </div>

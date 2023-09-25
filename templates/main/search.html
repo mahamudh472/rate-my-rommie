@@ -14,7 +14,7 @@
 <div class="container" style="min-height: 600px;">
     {% if roommate_list %}
     {% for roommate in roommate_list %}
-    <a href="{% url 'main:profile_view' roommate.user.username %}" class="text-decoration-none"> 
+    <a href="{% url 'main:profile_view' roommate.id %}" class="text-decoration-none"> 
         <div class="search-main-div2">
             <i class="fa-solid fa-arrow-right"></i>
 
@@ -28,7 +28,7 @@
                     <i class="fa-regular fa-star"></i>
                 </div>
                 <div class="div2">
-                    <h3 class="mb-4 ms-3">{{roommate.user.first_name}}</h3>
+                    <h3 class="mb-4 ms-3">{{roommate.full_name}}</h3>
                     <div class="div2-maindiv">
                         <p class="fw-bold mb-0">smoke</p>
                         <div class="emtydiv">

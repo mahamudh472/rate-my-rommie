@@ -7,7 +7,7 @@
 <div class="main-container">
     <form class="login" method="post" action="{% url 'accounts:login' %}">
       {% csrf_token %}
-        <h2>Welcome, User!</h2>
+        <h2 class="text-dark">Welcome, User!</h2>
         <p>Please log in</p>
         <input type="text" placeholder="username or email" name="email" />
         <input type="password" placeholder="Password" name="password" />

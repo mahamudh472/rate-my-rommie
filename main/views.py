@@ -5,34 +5,35 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 import json
 # Create your views here.
-@login_required(login_url="/accounts/login")
+
 def home(request):
     return render(request, 'main/index.html')
 
-@login_required(login_url="/accounts/login")
+
 def profile(request):
     user = UserProfile.objects.get(user=request.user)
     attributes = Attribute.objects.filter(author=user)
     return render(request, 'main/roommatedetails.html', {'userp': user, 'attributes': attributes})
 
-@login_required(login_url="/accounts/login")
-def profile_view(request, username):
-    user = UserProfile.objects.get(user=User.objects.get(username=username))
+
+def profile_view(request, id):
+    user = UserProfile.objects.get(id=id)
     all_attributes = Attribute.objects.all()
     attributes = Attribute.objects.filter(author=user)
     return render(request, 'main/roommatedetails.html', {'userp': user, 'attributes': attributes, 'all_attributes': all_attributes})
 
-@login_required(login_url="/accounts/login")
+
 def search(request):
     roomate_key = request.GET.get('Roommate', None)
     address_key = request.GET.get('Address', None)
     if roomate_key:
         roommate = request.GET['Roommate']
-        current_user = UserProfile.objects.get(user=request.user)
-        qs1 = UserProfile.objects.exclude(id=current_user.id).filter(user__username__icontains=roommate)
-        qs2 = UserProfile.objects.exclude(id=current_user.id).filter(user__first_name__icontains=roommate)
-        qs3 = UserProfile.objects.exclude(id=current_user.id).filter(user__last_name__icontains=roommate)
-        roommate_list = qs1 | qs2 | qs3
+        
+        qs1 = UserProfile.objects.filter(user__username__icontains=roommate)
+        qs2 = UserProfile.objects.filter(user__first_name__icontains=roommate)
+        qs3 = UserProfile.objects.filter(user__last_name__icontains=roommate)
+        qs4 = UserProfile.objects.filter(full_name__icontains=roommate)
+        roommate_list = qs1 | qs2 | qs3 | qs4
         total = roommate_list.count()
         
         context = {
@@ -58,7 +59,25 @@ def search(request):
         return render(request, 'main/searchaddress.html', context)
     return render(request, 'main/search.html')
 
-@login_required(login_url="/accounts/login")
+def add_roommate(request):
+    if request.method == "POST":
+        full_name = request.POST['full-name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        mobile = request.POST['mobile']
+        address = request.POST['address']
+        photo = request.FILES['picture__input']
+        userprofile = UserProfile( full_name=full_name, email=email, phone=phone, mobile=mobile, address=address, photo=photo)
+        userprofile.save()
+        attributes = request.POST.get('attribute_list', None)
+        if attributes:
+            for i in json.loads(attributes):
+                attr = userprofile.attribute_set.get_or_create(name=i[0], rating=i[1],)[0]
+                attr.save()
+        messages.success(request, 'Roommate added successfully')
+        return render(request, 'main/addroommate.html')
+    return render(request, 'main/addroommate.html')
+
 def add_address(request):
     if request.method == "POST":
         name = request.POST['address-name']
@@ -72,7 +91,7 @@ def add_address(request):
         return render(request, 'main/addaddress.html')
     return render(request, 'main/addaddress.html')
 
-@login_required(login_url="/accounts/login")
+
 def edit_profile(request):
     if request.method == "POST":
         name = request.POST.get('name', None)
@@ -115,13 +134,13 @@ def edit_profile(request):
 
     return redirect("main:profile")
 
-@login_required(login_url="/accounts/login")
+
 def address_view(request, pk):
     address = Address.objects.get(id=pk)
     # reviews = address.addressreview_set.all()
     return render(request, 'main/addressdetails.html', {'address': address})
 
-@login_required(login_url="/accounts/login")
+
 def address_add_review(request, pk):
     address = Address.objects.get(id=pk)
     if request.method == "POST":
@@ -130,7 +149,7 @@ def address_add_review(request, pk):
         return render(request, 'main/addressdetails.html', {'address': address})
     return render(request, 'main/addressdetails.html', {'address': address})
 
-@login_required(login_url="/accounts/login")
+
 def roommate_add_review(request, pk):
     roommate = UserProfile.objects.get(id=pk)
     if request.method == "POST":

@@ -20,7 +20,7 @@
                                 class="rounded-circle" width="150">
                             {% endif %}
                             <div class="mt-3">
-                                <h4>{{userp.user.first_name}} {{userp.user.last_name}}</h4>
+                                <h4>{{userp.full_name}}</h4>
                                 <p class="text-secondary mb-1">Overall Score: 4.5</p>
                                 <p class="text-muted font-size-sm">Attributes: Friendly</p>
                                 <!-- <button class="btn btn-primary">Follow</button>
@@ -98,7 +98,7 @@
                                 <h6 class="mb-0">Full Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{userp.user.first_name}} {{userp.user.last_name}}
+                                {{userp.full_name}}
                             </div>
                         </div>
                         <hr>
@@ -107,7 +107,7 @@
                                 <h6 class="mb-0">Email</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                {{userp.user.email}}
+                                {{userp.email}}
                             </div>
                         </div>
                         <hr>
@@ -301,7 +301,7 @@
 
             </div>
         </div>
-        {% if request.user != userp.user %}
+        {% if request.user != userp.user and user.is_authenticated %}
         <div class="add-review mt-5">
             <h3>Add Review</h3>
             <form action="{% url 'main:roommate_add_review' userp.id %}" method="post">
@@ -374,6 +374,12 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
+        {% else %}
+        {% if not user.is_authenticated %}
+        <div class="add-review mt-5">
+            <h3>Add Review</h3>
+            <p class="bg-danger p-2 text-center text-white h5">You need to login to add review</p>
+            {% endif %}
         {% endif %}
         <h3 class="mt-3">Reviews</h3>
         {% for review in userp.roommatereview_set.all reversed %}
@@ -381,7 +387,7 @@
             <div class="main-div-2">
                 <h3 class="ovarall-review">{{review.rating}}</h3>
                 <div class="child-div">
-                    <a href="{% url 'main:profile_view' review.author.username %}">{{review.author.username}}</a>
+                    <a href="{% url 'main:profile_view' review.user.userprofile.id %}">{{review.user.username}}</a>
                     <p>{{review.text}}</p>
                     {% if review.attribute_set.all %}
                     <ol>

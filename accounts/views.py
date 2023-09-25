@@ -50,6 +50,7 @@ def register(request):
         userProfile = UserProfile.objects.get_or_create(
             user=user,
             full_name=fullname,
+            email=email
         )[0]
         userProfile.save()
         sos = SocialMedia.objects.get_or_create(

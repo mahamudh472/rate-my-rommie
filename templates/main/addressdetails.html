@@ -62,7 +62,7 @@
             <div class="main-div-2">
                 <h3 class="ovarall-review">{{review.rating}}</h3>
                 <div class="child-div">
-                    <a href="{% url 'main:profile_view' review.author.username %}">{{review.author.username}}</a>
+                    <a href="{% url 'main:profile_view' review.roommate.id %}">{{review.roomamte.full_name}}</a>
                     <p>{{review.text}}</p>
 
                 </div>

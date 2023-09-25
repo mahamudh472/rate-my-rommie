@@ -442,3 +442,8 @@ hr {
 
     /* Add more styles as needed */
 }
+
+.navbar-nav .nav-item .nav-link:hover{
+    background-color: #ec6464;
+    transition: 0.5s;
+}
