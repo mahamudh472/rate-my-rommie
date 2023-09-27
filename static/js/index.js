@@ -27,7 +27,8 @@ const cngHeadText = () => {
 
 function add_attribute(){
     var element = document.getElementById("attr").value;
-    var rate = document.getElementsByName("rateA");
+    var rate = document.getElementsByName("stars");
+    var rating;
     for (let index = 0; index < rate.length; index++) {
         if (rate[index].checked == true) {
             rating = rate[index].value;
@@ -62,7 +63,7 @@ function display_data(){
         
     }
     document.getElementById("attr").value="";
-    document.getElementsByName("rateA")[0].checked = true;
+    document.getElementsByName("stars")[0].checked = true;
 }
 window.onload = function(){
     localStorage.clear();

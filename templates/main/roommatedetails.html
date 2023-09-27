@@ -308,19 +308,37 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <h6>Rate</h6>
-                    <div>
-                        <div class="rate">
-                            <input type="radio" id="star5" name="rate" value="5" />
-                            <label for="star5" title="text">5 stars</label>
-                            <input type="radio" id="star4" name="rate" value="4" />
-                            <label for="star4" title="text">4 stars</label>
-                            <input type="radio" id="star3" name="rate" value="3" />
-                            <label for="star3" title="text">3 stars</label>
-                            <input type="radio" id="star2" name="rate" value="2" />
-                            <label for="star2" title="text">2 stars</label>
-                            <input type="radio" id="star1" name="rate" value="1" />
-                            <label for="star1" title="text">1 star</label>
-                        </div>
+                    <div class="rating">
+                        <label>
+                          <input type="radio" name="rate" value="1" />
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input type="radio" name="rate" value="2" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input type="radio" name="rate" value="3" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>   
+                        </label>
+                        <label>
+                          <input type="radio" name="rate" value="4" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
+                        <label>
+                          <input type="radio" name="rate" value="5" />
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                          <span class="icon">★</span>
+                        </label>
                     </div>
                     <div class="form-group ">
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
@@ -340,31 +358,38 @@
                             {% endfor %}
                         </datalist>
                         <div class="col-4 d-flex justify-content-around">
-                            <!-- <div>
-                                <div class="rate">
-                                    <input type="radio" id="star5" name="rateA" value="5" />
-                                    <label for="star5" title="text">5 stars</label>
-                                    <input type="radio" id="star4" name="rateA" value="4" />
-                                    <label for="star4" title="text">4 stars</label>
-                                    <input type="radio" id="star3" name="rateA" value="3" />
-                                    <label for="star3" title="text">3 stars</label>
-                                    <input type="radio" id="star2" name="rateA" value="2" />
-                                    <label for="star2" title="text">2 stars</label>
-                                    <input type="radio" id="star1" name="rateA" value="1" />
-                                    <label for="star1" title="text">1 star</label>
-                                </div>
-                            </div> -->
-                            <div>
-                                <input type="radio" id="star-5" name="rateA" value="1" />
-                                <label for="star-5" title="text"><i class="fa fa-star"></i></label>
-                                <input type="radio" id="star-4" name="rateA" value="2" />
-                                <label for="star-4" title="text"><i class="fa fa-star"></i></label>
-                                <input type="radio" id="star-3" name="rateA" value="3" />
-                                <label for="star-3" title="text"><i class="fa fa-star"></i></label>
-                                <input type="radio" id="star-2" name="rateA" value="4" />
-                                <label for="star-2" title="text"><i class="fa fa-star"></i></label>
-                                <input type="radio" id="star-1" name="rateA" value="5" />
-                                <label for="star-1" title="text"><i class="fa fa-star"></i></label>
+                            
+                            <div class="rating">
+                                <label>
+                                  <input type="radio" name="stars" value="1" />
+                                  <span class="icon">★</span>
+                                </label>
+                                <label>
+                                  <input type="radio" name="stars" value="2" />
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                </label>
+                                <label>
+                                  <input type="radio" name="stars" value="3" />
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>   
+                                </label>
+                                <label>
+                                  <input type="radio" name="stars" value="4" />
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                </label>
+                                <label>
+                                  <input type="radio" name="stars" value="5" />
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                  <span class="icon">★</span>
+                                </label>
                             </div>
                             <button class="btn btn-primary" type="button" onclick="add_attribute()">Add</button>
                         </div>
@@ -387,7 +412,7 @@
             <div class="main-div-2">
                 <h3 class="ovarall-review">{{review.rating}}</h3>
                 <div class="child-div">
-                    <a href="{% url 'main:profile_view' review.user.userprofile.id %}">{{review.user.username}}</a>
+                    <a href="{% url 'main:profile_view' review.author.id %}">{{review.author.username }}</a>
                     <p>{{review.text}}</p>
                     {% if review.attribute_set.all %}
                     <ol>
@@ -428,4 +453,11 @@
 </div>
 
 
+{% endblock %}
+{% block script %}
+<script>
+    $(':radio').change(function() {
+  console.log('New star rating: ' + this.value);
+});
+</script>
 {% endblock %}
